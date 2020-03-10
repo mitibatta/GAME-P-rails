@@ -2,11 +2,11 @@ class Api::UsersController < ApplicationController
   before_action :set_user, only: :show
   def create
     @user = User.new(user_params)
-    if @user.name.blank? || @user.email.blank? ||@user.password.blank? || @user.password_confirmation.blank?
-      response_bad_request
-    elsif User.exists?(email: @user.email)
-      response_conflict(:user)
-    elsif @user.save
+    # if @user.name.blank? || @user.email.blank? ||@user.password.blank? || @user.password_confirmation.blank?
+    #   response_bad_request
+    # if User.exists?(email: @user.email)
+    #   response_conflict(:user)
+    if @user.save
       response_success(:user, :create)
     else
     response_internal_server_error
