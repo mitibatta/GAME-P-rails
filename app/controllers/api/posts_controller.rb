@@ -6,7 +6,9 @@ class Api::PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(post_params)
+    @post = Post.new
+    @post.pictures.build
+    @post = current_user.posts.build(post_params)
     if @post.text.blank?
       response_bad_request
     elsif @post.save
@@ -46,6 +48,6 @@ class Api::PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:text, pictures_attributes: [:image, :video, :id, :user_id, :post_id])
+    params.require(:post).permit(:text, pictures_attributes: [:image, :video, :user_id, published_at])
   end
 end

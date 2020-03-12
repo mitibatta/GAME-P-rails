@@ -1,20 +1,23 @@
 class Api::SessionsController < ApplicationController  
   before_action :set_user, only: :create
   def create
+    @user.password = @user.password_digest
     if @user.email.blank? || @user.password.blank?
       response_bad_request
-    elsif @user.authenticate(password_params[:password])
+    elsif @user.authenticate(password_params[:password_digest])
       log_in @user
       response_success_login
     else
       response_unauthorized
     end
+  end
   
 
 
   def destroy
     log_out
     response_success(:session, :destroy)
+  end
 
   private
   def set_user
@@ -25,7 +28,7 @@ class Api::SessionsController < ApplicationController
     params.require(:session).permit(:email)
   end
   def password_params
-    params.require(:session).permit(:password)
+    params.require(:session).permit(:password_digest)
   end
 
   def log_in(user)
