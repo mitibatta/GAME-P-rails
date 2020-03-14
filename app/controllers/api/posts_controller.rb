@@ -18,7 +18,7 @@ class Api::PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
-    @post.pictures.build(image: params[:image], video: params[:video], user_id: params[:user_id])
+    @post.pictures.build(image: params[:post][:image], video: params[:post][:video], user_id: params[:post][:user_id])
     @post.pictures.each do |picture|
       picture.post_id = @post.id
     end
