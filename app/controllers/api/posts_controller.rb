@@ -2,18 +2,29 @@ class Api::PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
   def index
     @posts = Post.all.order(created_at: :desc)
-    render json: @posts
+    @posts.each do |post|
+      @user = post.user.name
+      @image = post.pictures.image
+      @video = post.pictures.video
+    end
+    render json: {posts: @posts, user: @user, image: @image, video: @video}
+    # render json: @posts
   end
 
+  # def new
+  #   @post = Post.new
+  #   @post.pictures.build
+  # end
+
   def create
-    @post = Post.create!(post_params)
-    # @post.user_id = current_user.id
+    @post = Post.new(post_params)
+    @post.pictures.build(picture_params)
     @post.pictures.each do |picture|
       picture.post_id = @post.id
     end
     if @post.text.blank?
       response_bad_request
-    elsif @post.save
+    elsif @post.save!
       response_success(:post, :create)
     else
       response_internal_server_error
@@ -38,7 +49,7 @@ class Api::PostsController < ApplicationController
     if @post.destroy
       response_success(:post, :destroy)
     else
-      esponse_internal_server_error
+      response_internal_server_error
     end
   end
 
@@ -50,6 +61,10 @@ class Api::PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:text, :user_id, pictures_attributes: [:image, :video, :user_id])
+    params.require(:post).permit(:text, :user_id)
+  end
+
+  def picture_params
+    params.require(:post).permit(:image, :video, :user_id)
   end
 end

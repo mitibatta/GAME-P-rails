@@ -6,7 +6,7 @@ class Api::UsersController < ApplicationController
       response_bad_request
     elsif User.exists?(email: @user.email)
       response_conflict(:user)
-    elsif @user.save!
+    elsif @user.save
       response_success(:user, :create)
     else
     response_internal_server_error
