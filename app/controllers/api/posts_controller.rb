@@ -18,7 +18,7 @@ class Api::PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
-    @post.pictures.build(picture_params)
+    @post.pictures.build(image: params[:image], video: params[:video], user_id: params[:user_id])
     @post.pictures.each do |picture|
       picture.post_id = @post.id
     end
@@ -64,7 +64,7 @@ class Api::PostsController < ApplicationController
     params.require(:post).permit(:text, :user_id)
   end
 
-  def picture_params
-    params.require(:post).permit(:image, :video, :user_id)
-  end
+  # def picture_params
+  #   params.require(:post).permit(:image, :video, :user_id)
+  # end
 end
