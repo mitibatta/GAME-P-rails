@@ -17,7 +17,7 @@ class Api::PostsController < ApplicationController
   # end
 
   def create
-    @post = Post.new(post_params)
+    @post = Post.new(text: params[:post][:text], user_id: [:post][:user_id])
     @post.pictures.build(image: params[:post][:image], video: params[:post][:video], user_id: params[:post][:user_id])
     @post.pictures.each do |picture|
       picture.post_id = @post.id
@@ -25,7 +25,7 @@ class Api::PostsController < ApplicationController
     if @post.text.blank?
       response_bad_request
     elsif @post.save!
-      response_success(:post, :create)
+      response_success("投稿")
     else
       response_internal_server_error
     end
@@ -60,9 +60,9 @@ class Api::PostsController < ApplicationController
     response_not_found(:post) if @post.blank?
   end
 
-  def post_params
-    params.require(:post).permit(:text, :user_id)
-  end
+  # def post_params
+  #   params.require(:post).permit(:text, :user_id)
+  # end
 
   # def picture_params
   #   params.require(:post).permit(:image, :video, :user_id)

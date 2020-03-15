@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::API
-  def response_success(class_name, action_name)
-    render status: 200, json: { status: 200, message: "Success #{class_name.capitalize} #{action_name.capitalize}" }
+  def response_success(class_name)
+    render status: 200, json: { status: 200, message: "#{class_name}に成功しました。" }
   end
 
   def response_success_login

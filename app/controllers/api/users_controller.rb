@@ -7,7 +7,7 @@ class Api::UsersController < ApplicationController
     elsif User.exists?(email: @user.email)
       response_conflict(:user)
     elsif @user.save
-      response_success(:user, :create)
+      response_success('アカウント作成')
     else
     response_internal_server_error
     end

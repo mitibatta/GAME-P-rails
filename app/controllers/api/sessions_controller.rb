@@ -16,7 +16,7 @@ class Api::SessionsController < ApplicationController
 
   def destroy
     log_out
-    response_success(:session, :destroy)
+    response_success("ログアウト")
   end
 
   private
