@@ -2,22 +2,15 @@ class Api::PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
   def index
     @posts = Post.all.order(created_at: :desc)
-    @posts.each do |post|
-      @user = post.user.name
-      @image = post.pictures.image
-      @video = post.pictures.video
-    end
-    render json: {posts: @posts, user: @user, image: @image, video: @video}
+    @user = User.all
+    @picture = Picture.all
+    render json: {posts: @posts, users: @user, pictures: @picture}
     # render json: @posts
   end
 
-  # def new
-  #   @post = Post.new
-  #   @post.pictures.build
-  # end
-
   def create
-    @post = Post.new(text: params[:post][:text], user_id: [:post][:user_id])
+    # binding.pry
+    @post = Post.new(post_params)
     @post.pictures.build(image: params[:post][:image], video: params[:post][:video], user_id: params[:post][:user_id])
     @post.pictures.each do |picture|
       picture.post_id = @post.id
@@ -38,8 +31,9 @@ class Api::PostsController < ApplicationController
   def update
     if @post.text.blank?
       response_bad_request
-    elsif @post.update
-      response_success(:post, :update)
+    elsif @post.update(post_params)
+      @post.pictures.update(image: params[:post][:image], video: params[:post][:video])
+      response_success('投稿の更新')
     else
       response_internal_server_error
     end
@@ -60,9 +54,9 @@ class Api::PostsController < ApplicationController
     response_not_found(:post) if @post.blank?
   end
 
-  # def post_params
-  #   params.require(:post).permit(:text, :user_id)
-  # end
+  def post_params
+    params.require(:post).permit(:text, :user_id)
+  end
 
   # def picture_params
   #   params.require(:post).permit(:image, :video, :user_id)

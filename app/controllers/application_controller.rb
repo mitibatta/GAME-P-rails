@@ -5,7 +5,6 @@ class ApplicationController < ActionController::API
 
   def response_success_login
     render status: 200, json: { status: 200, message: "ログインしました。", userId: session[:user_id] }
-    # session[:user_id]をかくとサーバがおかしくなる
   end
   
   # 400 Bad Request
