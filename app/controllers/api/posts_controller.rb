@@ -5,7 +5,6 @@ class Api::PostsController < ApplicationController
     @user = User.all
     @picture = Picture.all
     render json: {posts: @posts, users: @user, pictures: @picture}
-    # render json: @posts
   end
 
   def create
@@ -17,7 +16,7 @@ class Api::PostsController < ApplicationController
     end
     if @post.text.blank?
       response_bad_request
-    elsif @post.save!
+    elsif @post.save
       response_success("投稿")
     else
       response_internal_server_error
@@ -25,7 +24,9 @@ class Api::PostsController < ApplicationController
   end
 
   def show
-    render json: @post
+    @picture = Picture.find_by(post_id: params[:id])
+    @user = @post.user.name
+    render json: {post: @post, picture: @picture, user: @user}
   end
 
   def update
@@ -41,7 +42,9 @@ class Api::PostsController < ApplicationController
 
   def destroy
     if @post.destroy
-      response_success(:post, :destroy)
+      @pic = Picture.find_by(id: params[:id])
+      @pic.destroy
+      response_success('投稿の削除')
     else
       response_internal_server_error
     end
