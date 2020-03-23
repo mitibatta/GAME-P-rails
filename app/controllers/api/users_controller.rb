@@ -1,5 +1,6 @@
 class Api::UsersController < ApplicationController
   before_action :set_user, only: :show
+  
   def create
     @user = User.new(user_params)
     if @user.name.blank? || @user.email.blank? ||@user.password_digest.blank?
@@ -14,8 +15,13 @@ class Api::UsersController < ApplicationController
   end
 
   def show
-    @post = @user.posts.all.order(created_at: :desc)
-    render json: @post
+    @posts = @user.posts.all.order(created_at: :desc)
+    @pictures = []
+    @posts.each do |post|
+      pic = Picture.find_by(post_id: post.id)
+      @pictures.push(pic)
+    end
+    render json: {user: @user, posts: @posts, pictures: @pictures}
   end
 
   private

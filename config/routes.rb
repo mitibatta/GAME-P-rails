@@ -6,7 +6,8 @@ Rails.application.routes.draw do
     resources :posts
     resources :favorites, only: [:index, :create, :destroy]
     get '/favorites/userIndex/:id', to: 'favorites#indexUsers'
-    resources :comments, only: [:create]
+    get '/favorites/count', to: 'favorites#count'
+    resources :comments, only: [:create, :show]
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

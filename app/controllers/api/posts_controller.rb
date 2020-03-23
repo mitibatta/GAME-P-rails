@@ -4,7 +4,8 @@ class Api::PostsController < ApplicationController
     @posts = Post.all.order(created_at: :desc)
     @user = User.all
     @picture = Picture.all
-    render json: {posts: @posts, users: @user, pictures: @picture}
+    @favorite = Favorite.all
+    render json: {posts: @posts, users: @user, pictures: @picture, favorites: @favorite}
   end
 
   def create

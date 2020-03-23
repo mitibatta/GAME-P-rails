@@ -16,6 +16,12 @@ class Api::FavoritesController < ApplicationController
     @post = @user.favorite_posts.all
     render json: @post
   end
+
+  def count
+    @post = Post.find_by(id: params[:id])
+    @favorite = @post.favorites.all
+    render json: @favorite.length
+  end
       
       def create
     @favorite = Favorite.new(favorite_params)
