@@ -17,11 +17,12 @@ class Api::UsersController < ApplicationController
   def show
     @posts = @user.posts.all.order(created_at: :desc)
     @pictures = []
+    @favorites = Favorite.all
     @posts.each do |post|
       pic = Picture.find_by(post_id: post.id)
       @pictures.push(pic)
     end
-    render json: {user: @user, posts: @posts, pictures: @pictures}
+    render json: {user: @user, posts: @posts, pictures: @pictures, favorites: @favorites}
   end
 
   private

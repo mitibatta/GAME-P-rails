@@ -26,8 +26,9 @@ class Api::PostsController < ApplicationController
 
   def show
     @picture = Picture.find_by(post_id: params[:id])
+    @favorites = @post.favorites
     @user = @post.user.name
-    render json: {post: @post, picture: @picture, user: @user}
+    render json: {post: @post, picture: @picture, user: @user, favorites: @favorites}
   end
 
   def update

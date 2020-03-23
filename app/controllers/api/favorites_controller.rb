@@ -2,6 +2,7 @@ class Api::FavoritesController < ApplicationController
   def index
     @login_user = User.find_by(id: params[:id])
     @favorites = @login_user.favorite_posts.all.order(created_at: :desc)
+    @favs = Favorite.all
     @pictures = []
     @users = []
     @favorites.each do |favorite|
@@ -9,7 +10,7 @@ class Api::FavoritesController < ApplicationController
       @pictures.push(pic)
       @users.push(favorite.user)
     end
-    render json: {posts: @favorites, pictures: @pictures, users: @users}
+    render json: {posts: @favorites, pictures: @pictures, users: @users, favorites: @favs}
       end
   def indexUsers
     @user = User.find_by(id: params[:id])
