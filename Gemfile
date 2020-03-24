@@ -7,9 +7,9 @@ ruby '2.6.5'
 gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
 gem 'rack-cors'
 # Use sqlite3 as the database for Active Record
-# gem 'sqlite3', groups: %w(test development), require: false
+gem 'sqlite3', '~> 1.4', groups: %w(test development), require: false
 
-# gem 'pg', groups: %w(production), require: false
+gem 'mysql2', '>= 0.3.18', '< 0.5', groups: %w(production), require: false
 
 # gem 'sqlite3', '~> 1.4'
 # Use Puma as the app server
